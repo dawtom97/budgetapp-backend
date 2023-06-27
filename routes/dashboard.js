@@ -14,5 +14,14 @@ router.get("/", authorization, async (req,res) => {
     }
 })
 
+router.get("/expenses", authorization, async (req,res) => {
+    try {
+        const {rows} = await pool.query("SELECT * FROM expenses WHERE user_id = $1",[req.user]);
+        res.json({expenses:rows})
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json("Server error") 
+    }
+})
 
 module.exports = router;
