@@ -50,8 +50,8 @@ router.post("/expenses-add", authorization, async (req,res) => {
 
 router.delete("/expenses-delete", authorization, async (req,res) => {
     try {
-       const {expense_id} = req.body;
-       const expense = await pool.query("DELETE FROM expenses WHERE expense_id = $1",[expense_id]);
+       const {id} = req.body;
+       const expense = await pool.query("DELETE FROM expenses WHERE expense_id = $1",[id]);
        res.json({success:true,message:"Expense deleted successfully"})
     } catch (error) {
        console.log(error.message);
