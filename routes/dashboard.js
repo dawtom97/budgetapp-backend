@@ -48,5 +48,28 @@ router.post("/expenses-add", authorization, async (req,res) => {
     }
 })
 
+router.delete("/expenses-delete", authorization, async (req,res) => {
+    try {
+       const {expense_id} = req.body;
+       const expense = await pool.query("DELETE FROM expenses WHERE expense_id = $1",[expense_id]);
+       res.json({success:true,message:"Expense deleted successfully"})
+    } catch (error) {
+       console.log(error.message);
+       res.status(500).json({success:false,message:"Expense doesnt exists"}) 
+    }
+})
+
+router.patch("/expenses-edit", authorization, async (req,res) => {
+    try {
+        const {category,title,amount,id} = req.body;
+        console.log(req.body)
+        const expense = await pool.query("UPDATE expenses SET expense_title = $1, expense_category = $2, expense_amount = $3, expense_date = CURRENT_DATE WHERE expense_id = $4",[title,category,amount,id]);
+        res.json({success:true,message:"Expense edited successfully"})
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({success:false,message:"Expense doesnt exists"})
+    }
+})
+
 
 module.exports = router;
